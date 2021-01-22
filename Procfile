@@ -1,0 +1,1 @@
+web: gunicorn a_social_project.wsgi
