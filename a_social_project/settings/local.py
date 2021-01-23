@@ -12,3 +12,4 @@ CSRF_COOKIE_SECURE = False
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False
 SECURE_HSTS_SECONDS = None
 SECURE_FRAME_DENY = False
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -1,0 +1,15 @@
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">
+                {{ message|safe }}
+                <a href="#" class="close" onclick="removeLi(this)">X</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <script>
+        function removeLi(elem) {
+            $(elem).parent('li').remove()
+        }
+    </script>
+{% endif %}
