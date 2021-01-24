@@ -1,9 +1,9 @@
 (function () {
-    var baseUrl = 'http://127.0.0.1:8000/'
+    var baseUrl = 'https://raju-social.herokuapp.com/';
     if (window.myBookmarklet !== undefined) {
         myBookmarklet();
     } else {
         document.body.appendChild(document.createElement('script')).src = '' +
-            baseUrl + 'static/js/bookmarklet.js?r=' + Math.floor(Math.random() * 99999999);
+            baseUrl + 'static/js/bookmarklet.js?r=' + Math.floor(Math.random() * 99999999999999999999);
     }
 })();
