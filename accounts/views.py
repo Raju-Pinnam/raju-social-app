@@ -6,7 +6,9 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 
 from images.models import Image
+from actions.models import Action
 from common.decorators import ajax_required
+from actions.utils import create_action
 
 from .forms import (LoginForm, UserRegistrationForm,
                     ProfileEditForm, UserEditForm)
@@ -40,9 +42,16 @@ def user_login(request):
 
 @login_required
 def dashboard(request):
+    # displaying all actions
+    actions = Action.objects.all()
+    following_ids = request.user.following.values_list('id', flat=True)
+    if following_ids:
+        actions = actions.filter(user_id__in=following_ids)
+    actions = actions.select_related('user', 'user__profile').prefetch_related('target')[:10]
     user_posts = Image.objects.filter(user=request.user)
     context = {'section': 'dashboard',
-               'user_posts': user_posts}
+               'user_posts': user_posts,
+               'actions': actions}
     return render(request, 'accounts/dashboard.html', context)
 
 
@@ -114,9 +123,11 @@ def user_follow(request):
             if action == 'follow':
                 Contact.objects.get_or_create(user_from=request.user,
                                               user_to=user)
+                create_action(request.user, 'is following', user)
             else:
                 Contact.objects.filter(user_from=request.user,
                                        user_to=user).delete()
+                create_action(request.user, 'is Un followed', user)
             return JsonResponse({'status': 'ok'})
         except User.DoesNotExist:
             return JsonResponse({'status': 'error'})
