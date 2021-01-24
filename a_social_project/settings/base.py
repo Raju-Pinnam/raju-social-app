@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'django_extensions',
+    'easy_thumbnails',
     'images.apps.ImagesConfig',
 ]
 
@@ -113,7 +114,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'project_static'),
+    os.path.join(BASE_DIR, 'static'),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'outer_static', 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'outer_static', 'media')
@@ -132,3 +133,10 @@ EMAIL_USE_TLS = True
 # Authentication
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend',
                            'accounts.authentication.EmailAuthentication']
+
+# calling User urls
+from django.urls import reverse_lazy
+
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda u: reverse_lazy('user_detail', args=[u.username])
+}
